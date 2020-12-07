@@ -209,6 +209,7 @@ def get_node_geo_coords(G, im_file, verbose=False):
             print("node", i, "/", nn)
         x_pix, y_pix = attr_dict['x_pix'], attr_dict['y_pix']
         lon, lat = apls_utils.pixelToGeoCoord(x_pix, y_pix, im_file)
+        lon, lat = lon/100000, lat /100000
         [utm_east, utm_north, utm_zone, utm_letter] =\
             utm.from_latlon(lat, lon)
         attr_dict['lon'] = lon
@@ -234,6 +235,7 @@ def convert_pix_lstring_to_geo(wkt_lstring, im_file):
     coords_utm = []
     for (x, y) in zip(x_pixs, y_pixs):
         lon, lat = apls_utils.pixelToGeoCoord(x, y, im_file)
+        lon, lat = lon/100000, lat /100000
         [utm_east, utm_north, utm_zone, utm_letter] = utm.from_latlon(lat, lon)
         coords_utm.append([utm_east, utm_north])
         coords_latlon.append([lon, lat])
