@@ -95,7 +95,7 @@ def add_travel_time(G_, speed_key='inferred_speed_mps', length_key='length',
             # print("speed:", speed)
         else:
             print("speed_key not found:", speed_key)
-            return
+            return G_
 #            data['inferred_speed'] = default_speed
 #            data[speed_key] = default_speed
 #            speed = default_speed
@@ -2682,19 +2682,22 @@ def gather_files(test_method, truth_dir, prop_dir,
 
     # use ground truth spacenet wkts, and submission wkt files
     elif test_method == 'gt_wkt_prop_wkt':
-
-        im_list = os.listdir(im_dir)
-        for i, f in enumerate(sorted(im_list)):
+        #im_list = os.listdir(im_dir)
+        #for i, f in enumerate(sorted([im_dir])):
             # skip non-tif files
-            if not f.endswith('.tif'):
-                continue
+            #print('awdwad')
+            #if not im_dir.endswith('.tif'):
+            #    continue
 
-            if i >= max_files:
-                break
-
-            im_file = os.path.join(im_dir, f)
-            outroot = 'AOI' + f.split('.')[0].split('AOI')[-1].replace('PS-RGB_', '')
+            #if i >= max_files:
+            #    break
             
+
+            im_file = im_dir
+             
+            outroot = os.path.basename(im_dir)
+            print(outroot)
+
             # gt file
             df_wkt_gt = pd.read_csv(gt_wkt_file)
             image_id = outroot
@@ -2704,20 +2707,20 @@ def gather_files(test_method, truth_dir, prop_dir,
 #            print("image_id", image_id)
 
             # filter
-            df_filt = df_wkt_gt['WKT_Pix'][df_wkt_gt['ImageId'] == image_id]
+            df_filt = df_wkt_gt['WKT_Pix'] 
             wkt_list = df_filt.values
-            weight_list = df_wkt_gt[wkt_weight_key][df_wkt_gt['ImageId'] == image_id].values
-
+            weight_list = []
+            verbose = False
             # print a few values
             if verbose:
-                print("\n", i, "/", len(im_list), "num linestrings:", len(wkt_list))
+                #print("\n", i, "/", len(im_list), "num linestrings:", len(wkt_list))
                 print("image_file:", im_file, "wkt_list[:2]", wkt_list[:2])
                 print("weight_list[:3]", weight_list[:3])
                 print("image_id:", image_id)
 
 
-            if (len(wkt_list) == 0) or (wkt_list[0] == 'LINESTRING EMPTY'):
-                continue
+            #if (len(wkt_list) == 0) or (wkt_list[0] == 'LINESTRING EMPTY'):
+            #    continue
 
             t1 = time.time()
             node_iter, edge_iter = 10000, 10000
@@ -2755,8 +2758,8 @@ def gather_files(test_method, truth_dir, prop_dir,
 #                                       default_speed=default_speed)
 
             # skip empty ground truth graphs
-            if len(G_gt_init.nodes()) == 0:
-                continue
+            #if len(G_gt_init.nodes()) == 0:
+            #    continue
             if verbose:
                 # print a node
                 node = list(G_gt_init.nodes())[-1]
@@ -2785,17 +2788,17 @@ def gather_files(test_method, truth_dir, prop_dir,
             # print("image_id", image_id)
 
             # filter
-            df_filt = df_wkt['WKT_Pix'][df_wkt['ImageId'] == image_id]
+            df_filt = df_wkt['WKT_Pix'] 
             wkt_list = df_filt.values
-            weight_list = df_wkt[wkt_weight_key][df_wkt['ImageId'] == image_id].values
+            weight_list = []
 
             # print a few values
             if verbose:
                 print(i, "/", len(im_list), "num linestrings:", len(wkt_list))
                 print("image_file:", im_file, "wkt_list[:2]", wkt_list[:2])
 
-            if (len(wkt_list) == 0) or (wkt_list[0] == 'LINESTRING EMPTY'):
-                continue
+            #if (len(wkt_list) == 0) or (wkt_list[0] == 'LINESTRING EMPTY'):
+            #    continue
 
             t1 = time.time()
             node_iter, edge_iter = 1000, 1000
@@ -2857,7 +2860,7 @@ def execute(output_name, gt_list, gp_list, root_list, im_loc_list=[],
             sp_length_buffer=0.05,
             use_pix_coords=False,
             allow_renaming=True,
-            verbose=True,
+            verbose=False,
             super_verbose=False):
     """
     Compute APLS for the input data in gt_list, gp_list
@@ -2979,20 +2982,20 @@ def execute(output_name, gt_list, gp_list, root_list, im_loc_list=[],
         print("len(G_p_init.nodes():)", len(G_p_init.nodes()))
         print("len(G_p_init.edges():)", len(G_p_init.edges()))
 
-#        ##################
-#        # make dirs
-#        outdir_base = os.path.join(path_apls, 'outputs')
-#        outdir_base2 = os.path.join(
-#            outdir_base, output_name, 'weight=' + weight)
-#        outdir = os.path.join(outdir_base2, outroot)
-#        print("output dir:", outdir)
-#        os.makedirs(outdir, exist_ok=True)
-#        # d_list = [outdir_base, outdir_base2, outdir]
-#        # for p in d_list:
-#        #    #if not os.path.exists(p) and make_plots:
-#        #    if not os.path.exists(p):
-#        #        os.makedirs(p)
-#        ##################
+        ##################
+        # make dirs
+        outdir_base = os.path.join(path_apls, 'outputs')
+        outdir_base2 = os.path.join(
+            outdir_base, output_name, 'weight=' + weight)
+        outdir = os.path.join(outdir_base2, outroot)
+        print("output dir:", outdir)
+        os.makedirs(outdir, exist_ok=True)
+        d_list = [outdir_base, outdir_base2, outdir]
+        for p in d_list:
+            #if not os.path.exists(p) and make_plots:
+            if not os.path.exists(p):
+                os.makedirs(p)
+        ##################
 
         # get graphs with midpoints and geometry (if small graph)
         print("\nMake gt, prop graphs...")
