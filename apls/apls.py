@@ -42,13 +42,13 @@ path_apls = os.path.dirname(path_apls_src)
 # print("path_apls:", path_apls)
 # add path and import graphTools
 sys.path.append(path_apls_src)
-import apls_utils
-import apls_plots
-import osmnx_funcs
-import graphTools
-import wkt_to_G
-import topo_metric
-import sp_metric
+import apls.apls.apls_utils
+import apls.apls.apls_plots
+import apls.apls.osmnx_funcs
+import apls.apls.graphTools
+import apls.apls.wkt_to_G
+import apls.apls.topo_metric
+import apls.apls.sp_metric
 
 # if in docker, the line below may be necessary
 # matplotlib.use('agg')
