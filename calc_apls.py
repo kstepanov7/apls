@@ -10,6 +10,7 @@ Original file is located at
 import cv2
 import numpy as np
 import sknw
+from sknw.sknw import build_sknw
 from scipy import ndimage
 from scipy.ndimage import binary_dilation
 from shapely.geometry import LineString, Point
