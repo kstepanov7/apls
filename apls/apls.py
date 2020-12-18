@@ -1399,6 +1399,7 @@ def make_graphs(G_gt_, G_p_,
     print("Ensure G_gt 'geometry' is a shapely geometry, not a linestring...")
     for i, (u, v, key, data) in enumerate(G_gt_.edges(keys=True, data=True)):
         if i == 0:
+            pass
             #print(("u,v,key,data:", u, v, key, data))
             #print(("  type data['geometry']:", type(data['geometry'])))
         try:
