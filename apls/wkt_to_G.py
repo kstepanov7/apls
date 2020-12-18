@@ -13,8 +13,6 @@ import os
 import sys
 path_apls_src = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(path_apls_src)
-import apls.apls.apls._clean_sub_graphs as  _clean_sub_graphs
-
 import apls.apls.apls_utils as apls_utils
 import apls.apls.osmnx_funcs as osmnx_funcs
 #from . import apls
@@ -35,6 +33,74 @@ import time
 import matplotlib.pyplot as plt
 # import cv2
 # import osmnx as ox
+
+def _clean_sub_graphs(G_, min_length=80, max_nodes_to_skip=100,
+                      weight='length', verbose=True,
+                      super_verbose=False):
+    """
+    Remove subgraphs with a max path length less than min_length,
+    if the subgraph has more than max_noxes_to_skip, don't check length
+       (this step great reduces processing time)
+    """
+
+    if len(G_.nodes()) == 0:
+        return G_
+
+    if verbose:
+        print("Running clean_sub_graphs...")
+    sub_graphs = list(nx.connected_component_subgraphs(G_))
+    bad_nodes = []
+    if verbose:
+        print(" len(G_.nodes()):", len(G_.nodes()))
+        print(" len(G_.edges()):", len(G_.edges()))
+    if super_verbose:
+        print("G_.nodes:", G_.nodes())
+        edge_tmp = G_.edges()[np.random.randint(len(G_.edges()))]
+        print(edge_tmp, "G.edge props:", G_.edges[edge_tmp[0]][edge_tmp[1]])
+
+    for G_sub in sub_graphs:
+        # don't check length if too many nodes in subgraph
+        if len(G_sub.nodes()) > max_nodes_to_skip:
+            continue
+
+        else:
+            all_lengths = dict(
+                nx.all_pairs_dijkstra_path_length(G_sub, weight=weight))
+            if super_verbose:
+                print("  \nGs.nodes:", G_sub.nodes())
+                print("  all_lengths:", all_lengths)
+            # get all lenghts
+            lens = []
+
+            # for u,v in all_lengths.iteritems():
+            for u in all_lengths.keys():
+                v = all_lengths[u]
+                # for uprime, vprime in v.iteritems():
+                for uprime in v.keys():
+                    vprime = v[uprime]
+                    lens.append(vprime)
+                    if super_verbose:
+                        print("  u, v", u, v)
+                        print("    uprime, vprime:", uprime, vprime)
+            max_len = np.max(lens)
+            if super_verbose:
+                print("  Max length of path:", max_len)
+            if max_len < min_length:
+                bad_nodes.extend(G_sub.nodes())
+                if super_verbose:
+                    print(" appending to bad_nodes:", G_sub.nodes())
+
+    # remove bad_nodes
+    G_.remove_nodes_from(bad_nodes)
+    if verbose:
+        print(" num bad_nodes:", len(bad_nodes))
+        # print ("bad_nodes:", bad_nodes)
+        print(" len(G'.nodes()):", len(G_.nodes()))
+        print(" len(G'.edges()):", len(G_.edges()))
+    if super_verbose:
+        print("  G_.nodes:", G_.nodes())
+
+    return G_
 
 
 ###############################################################################
