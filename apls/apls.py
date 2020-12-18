@@ -3065,19 +3065,19 @@ def execute(output_name, gt_list, gp_list, root_list, im_loc_list=[],
             # print("G_p_cp_prime.edges():", G_p_cp_prime.edges())
 
             #print("len all_pairs_lengths_gt_native:",
-                  len(dict(all_pairs_lengths_gt_native)))
+              #    len(dict(all_pairs_lengths_gt_native)))
             # for ktmp,vtmp in all_pairs_lengths_gt_native.iteritems():
             #    print ("  key:", ktmp, "len(all_pairs_lengths_gt_native[key]):", len(vtmp))
-            print("len all_pairs_lengths_gt_prime:",
-                  len(dict(all_pairs_lengths_gt_prime)))
+           # print("len all_pairs_lengths_gt_prime:",
+                 # len(dict(all_pairs_lengths_gt_prime)))
             # for ktmp,vtmp in all_pairs_lengths_gt_prime.iteritems():
             #    print ("  key:", ktmp, "len(all_pairs_lengths_gt_prime[key]):", len(vtmp))
-            print("len all_pairs_lengths_prop_native",
-                  len(dict(all_pairs_lengths_prop_native)))
+            #print("len all_pairs_lengths_prop_native",
+                  #len(dict(all_pairs_lengths_prop_native)))
             # for ktmp,vtmp in all_pairs_lengths_prop_native.iteritems():
             #    print ("  key:", ktmp, "len(all_pairs_lengths_prop_native[key]):", len(vtmp))
-            print("len all_pairs_lengths_prop_prime",
-                  len(dict(all_pairs_lengths_prop_prime)))
+           # print("len all_pairs_lengths_prop_prime",
+                #  len(dict(all_pairs_lengths_prop_prime)))
             # for ktmp,vtmp in all_pairs_lengths_prop_prime.iteritems():
             #    print ("  key:", ktmp, "len(all_pairs_lengths_prop_prime[key]):", len(vtmp))
 
