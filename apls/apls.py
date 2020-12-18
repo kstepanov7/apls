@@ -3096,6 +3096,7 @@ def execute(output_name, gt_list, gp_list, root_list, im_loc_list=[],
             verbose=verbose, res_dir=res_dir)
         apls_val = C
         if apls_only:
+            plt.close('all')
             return apls_val 
         #print("APLS Metric = ", C)
 
@@ -3561,7 +3562,7 @@ def execute(output_name, gt_list, gp_list, root_list, im_loc_list=[],
     df.to_csv(path_csv)
 
     #print(("Tot APLS = np.mean(APLS_arr:", np.mean(df['APLS'].values)))
-
+    plt.close('all')
     return apls_val, topo_val, sp_val
 
 
