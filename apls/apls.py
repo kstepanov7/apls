@@ -2862,7 +2862,8 @@ def execute(output_name, gt_list, gp_list, root_list, im_loc_list=[],
             use_pix_coords=False,
             allow_renaming=True,
             verbose=False,
-            super_verbose=False):
+            super_verbose=False,
+            apls_only=True):
     """
     Compute APLS for the input data in gt_list, gp_list
 
@@ -3094,6 +3095,8 @@ def execute(output_name, gt_list, gp_list, root_list, im_loc_list=[],
             min_path_length=min_path_length,
             verbose=verbose, res_dir=res_dir)
         apls_val = C
+        if apls_only:
+            return apls_val 
         #print("APLS Metric = ", C)
 
         #print("\nComputing TOPO Metric...")
@@ -3688,7 +3691,8 @@ def main():
         use_pix_coords=bool(args.use_pix_coords),
         allow_renaming=bool(args.allow_renaming),
         verbose=verbose,
-        super_verbose=super_verbose)
+        super_verbose=super_verbose,
+        apls_only=True)
 
 
 ###############################################################################
