@@ -13,6 +13,8 @@ import os
 import sys
 path_apls_src = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(path_apls_src)
+from apls.apls.apls import _clean_sub_graphs
+
 import apls.apls.apls_utils as apls_utils
 import apls.apls.osmnx_funcs as osmnx_funcs
 #from . import apls
@@ -307,7 +309,7 @@ def wkt_to_G(wkt_list, weight_list=[], im_file=None,
     print("Time to run nodes_edges_to_G():", t2-t1, "seconds")
 
     print("Clean out short subgraphs")
-    G0 = apls._clean_sub_graphs(G0, min_length=min_subgraph_length,
+    G0 = _clean_sub_graphs(G0, min_length=min_subgraph_length,
                           weight=prop_subgraph_filter_weight,
                           max_nodes_to_skip=30,
                           verbose=True,
