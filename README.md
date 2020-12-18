@@ -5,6 +5,24 @@
 <br>
 </p>
 
+## Setup and Dependencies
+- GDAL
+- geopandas==0.6.3
+- networkx==2.3
+- rasterio==1.0.22
+- [sknw](https://github.com/Image-Py/sknw)
+- simplification
+- utm
+
+
+Example of usage provided in **calc_apls.ipynb**
+
+
+
+
+
+
+
 - [Installation Instructions](#installation-instructions)
 - [Dependencies](#dependencies)
 - [License](#license)
