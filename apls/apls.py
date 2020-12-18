@@ -1385,10 +1385,10 @@ def make_graphs(G_gt_, G_p_,
     """
 
     t0 = time.time()
-    print("Executing make_graphs()...")
+    #print("Executing make_graphs()...")
 
-    print("Ensure", weight, "in gt graph prpperties")
-    print("type(G_gt_)", type(G_gt_))
+    #print("Ensure", weight, "in gt graph prpperties")
+    #print("type(G_gt_)", type(G_gt_))
     for i, (u, v, data) in enumerate(G_gt_.edges(keys=False, data=True)):
         # print("G_gt_.edges[u, v]:", G_gt_.edges[u, v])
         # print("G_gt_.edges[u, v][weight]:", G_gt_.edges[u, v][weight])
@@ -1399,8 +1399,8 @@ def make_graphs(G_gt_, G_p_,
     print("Ensure G_gt 'geometry' is a shapely geometry, not a linestring...")
     for i, (u, v, key, data) in enumerate(G_gt_.edges(keys=True, data=True)):
         if i == 0:
-            print(("u,v,key,data:", u, v, key, data))
-            print(("  type data['geometry']:", type(data['geometry'])))
+            #print(("u,v,key,data:", u, v, key, data))
+            #print(("  type data['geometry']:", type(data['geometry'])))
         try:
             line = data['geometry']
         except KeyError:
@@ -1459,7 +1459,7 @@ def make_graphs(G_gt_, G_p_,
             return
 
     # get proposal graph with native midpoints
-    print("Ensure G_p 'geometry' is a shapely geometry, not a linestring...")
+    #print("Ensure G_p 'geometry' is a shapely geometry, not a linestring...")
     for i, (u, v, key, data) in enumerate(G_p_.edges(keys=True, data=True)):
         if i == 0:
             print(("u,v,key,data:", u, v, key, data))
@@ -2919,7 +2919,7 @@ def execute(output_name, gt_list, gp_list, root_list, im_loc_list=[],
     """
 
     # now compute results
-    print("\n\n\nCompute Results...")
+    #print("\n\n\nCompute Results...")
     C_arr = [["outroot", "APLS", "APLS_gt_onto_prop", "APLS_prop_onto_gt",
               "topo_tp_tot", "topo_fp_tot", "topo_fn_tot", "topo_precision",
               "topo_recall", "topo_f1",
@@ -2949,11 +2949,11 @@ def execute(output_name, gt_list, gp_list, root_list, im_loc_list=[],
     ##################
     # make dirs
     outdir_base = os.path.join(path_apls, 'outputs')
-    print ("Outdir base:", outdir_base)
+    #print ("Outdir base:", outdir_base)
     outdir_base2 = os.path.join(outdir_base, str(output_name),
                                 'weight=' + str(weight),
                                 test_method)
-    print ("Outdir with weight:", outdir_base2)
+    #print ("Outdir with weight:", outdir_base2)
     d_list = [outdir_base, outdir_base2]
     for p in d_list:
         if not os.path.exists(p):
@@ -2973,14 +2973,14 @@ def execute(output_name, gt_list, gp_list, root_list, im_loc_list=[],
         else:
             im_loc = ''
 
-        print("\n\n\n", i+1, "/", len(root_list), "Computing:", outroot)
+        #print("\n\n\n", i+1, "/", len(root_list), "Computing:", outroot)
         t1 = time.time()
 
         # print a few properties
-        print("len(G_gt_init.nodes():)", len(G_gt_init.nodes()))
-        print("len(G_gt_init.edges():)", len(G_gt_init.edges()))
-        print("len(G_p_init.nodes():)", len(G_p_init.nodes()))
-        print("len(G_p_init.edges():)", len(G_p_init.edges()))
+        #print("len(G_gt_init.nodes():)", len(G_gt_init.nodes()))
+        #print("len(G_gt_init.edges():)", len(G_gt_init.edges()))
+        #print("len(G_p_init.nodes():)", len(G_p_init.nodes()))
+        #print("len(G_p_init.edges():)", len(G_p_init.edges()))
 
         ##################
         # make dirs
@@ -2988,7 +2988,7 @@ def execute(output_name, gt_list, gp_list, root_list, im_loc_list=[],
         outdir_base2 = os.path.join(
             outdir_base, output_name, 'weight=' + weight)
         outdir = os.path.join(outdir_base2, outroot)
-        print("output dir:", outdir)
+        #print("output dir:", outdir)
         os.makedirs(outdir, exist_ok=True)
         d_list = [outdir_base, outdir_base2, outdir]
         for p in d_list:
@@ -2998,7 +2998,7 @@ def execute(output_name, gt_list, gp_list, root_list, im_loc_list=[],
         ##################
 
         # get graphs with midpoints and geometry (if small graph)
-        print("\nMake gt, prop graphs...")
+        #print("\nMake gt, prop graphs...")
         if len(G_gt_init.nodes()) < 500:  # 2000:
             G_gt_cp, G_p_cp, G_gt_cp_prime, G_p_cp_prime, \
                 control_points_gt, control_points_prop, \
@@ -3063,7 +3063,7 @@ def execute(output_name, gt_list, gp_list, root_list, im_loc_list=[],
             print("len G_p_cp_prime.edges():", len(G_p_cp_prime.edges()))
             # print("G_p_cp_prime.edges():", G_p_cp_prime.edges())
 
-            print("len all_pairs_lengths_gt_native:",
+            #print("len all_pairs_lengths_gt_native:",
                   len(dict(all_pairs_lengths_gt_native)))
             # for ktmp,vtmp in all_pairs_lengths_gt_native.iteritems():
             #    print ("  key:", ktmp, "len(all_pairs_lengths_gt_native[key]):", len(vtmp))
@@ -3092,9 +3092,10 @@ def execute(output_name, gt_list, gp_list, root_list, im_loc_list=[],
             control_points_gt, control_points_prop,
             min_path_length=min_path_length,
             verbose=verbose, res_dir=res_dir)
-        print("APLS Metric = ", C)
+        apls_val = C
+        #print("APLS Metric = ", C)
 
-        print("\nComputing TOPO Metric...")
+        #print("\nComputing TOPO Metric...")
         n_measurement_nodes = max_nodes
         topo_vals = topo_metric.compute_topo(
             G_gt_init, G_p_init,
@@ -3106,12 +3107,13 @@ def execute(output_name, gt_list, gp_list, root_list, im_loc_list=[],
             allow_multi_hole=False,
             make_plots=False, verbose=False)
         topo_tp_tot, topo_fp_tot, topo_fn_tot, topo_precision, topo_recall, topo_f1 = topo_vals
-        print("TOPO Metric subgraph_radius, interval:",
-              topo_subgraph_radius, topo_interval)
-        print("TOPO Metric =", topo_vals, "for", n_measurement_nodes,
-              "nodes, subgraph_radius =", topo_subgraph_radius)
+       # print("TOPO Metric subgraph_radius, interval:",
+        #      topo_subgraph_radius, topo_interval)
+        #print("TOPO Metric =", topo_vals, "for", n_measurement_nodes,
+        #      "nodes, subgraph_radius =", topo_subgraph_radius)
+        topo_val = topo_vals
 
-        print("\nComputing sp Metric...")
+        #print("\nComputing sp Metric...")
         sp_n_routes = max_nodes
         _, sp = sp_metric.compute_sp(
             G_gt_init, G_p_init,
@@ -3119,21 +3121,22 @@ def execute(output_name, gt_list, gp_list, root_list, im_loc_list=[],
             weight=weight, query_radius=max_snap_dist,
             length_buffer=sp_length_buffer, n_routes=sp_n_routes,
             verbose=False, make_plots=False)
-        print("sp_length_buffer:", sp_length_buffer)
-        print("sp Metric =", sp, "for", sp_n_routes,
-              "routes, length buffer =", sp_length_buffer)
-
+      #  print("sp_length_buffer:", sp_length_buffer)
+       # print("sp Metric =", sp, "for", sp_n_routes,
+        #      "routes, length buffer =", sp_length_buffer)
+        
+        sp_val = sp
         # get total length of edges
         # ground truth
         tot_meters_gt = 0
         for itmp, (u, v, attr_dict) in enumerate(G_gt_init.edges(data=True)):
             tot_meters_gt += attr_dict['length']
-        print("Ground truth total length of edges (km):", tot_meters_gt/1000)
+       # print("Ground truth total length of edges (km):", tot_meters_gt/1000)
         G_gt_init.graph['Tot_edge_km'] = tot_meters_gt/1000
         tot_meters_p = 0
         for itmp, (u, v, attr_dict) in enumerate(G_p_init.edges(data=True)):
             tot_meters_p += attr_dict['length']
-        print("Proposal total length of edges (km):", tot_meters_p/1000)
+       # print("Proposal total length of edges (km):", tot_meters_p/1000)
         G_p_init.graph['Tot_edge_km'] = tot_meters_p/1000
 
         # save scores
@@ -3155,8 +3158,8 @@ def execute(output_name, gt_list, gp_list, root_list, im_loc_list=[],
         f.close()
 
         t2 = time.time()
-        print("Total time to create graphs and compute metric:",
-              t2-t1, "seconds")
+      #  print("Total time to create graphs and compute metric:",
+      #        t2-t1, "seconds")
         C_arr.append([outroot, C, C_gt_onto_prop, C_prop_onto_gt,
                       # 0, 0, 0, 0, 0, 0,
                       topo_tp_tot, topo_fp_tot, topo_fn_tot, topo_precision, topo_recall, topo_f1,
@@ -3453,7 +3456,7 @@ def execute(output_name, gt_list, gp_list, root_list, im_loc_list=[],
             gt_set = set(lengths.keys())
             prop_set = set(lengths_prop.keys())
             missing_nodes = gt_set - prop_set
-            print("Proposal route missing nodes:", missing_nodes)
+            #print("Proposal route missing nodes:", missing_nodes)
 
             ##############
             # compute path to node of interest
@@ -3526,10 +3529,10 @@ def execute(output_name, gt_list, gp_list, root_list, im_loc_list=[],
                   t2-t0, "seconds")
 
     # print and save total cost
-    print(("C_arr:", C_arr))
+    #print(("C_arr:", C_arr))
     tf = time.time()
-    print(("Time to compute metric:", tf - t0, "seconds"))
-    print(("N input images:", len(root_list)))
+    #print(("Time to compute metric:", tf - t0, "seconds"))
+    #print(("N input images:", len(root_list)))
     #df = pd.DataFrame(C_arr[1:], columns=C_arr[0])
     #df.to_csv(os.path.join(outdir_base2, 'scores.csv'))
     #print(("len df:", len(df)))
@@ -3548,14 +3551,14 @@ def execute(output_name, gt_list, gp_list, root_list, im_loc_list=[],
                             + '_hole='
                             + str(np.round(topo_hole_size, 2)) + 'm'
                             + '.csv')
-    print("Save to csv:", path_csv)
+    #print("Save to csv:", path_csv)
     df = pd.DataFrame(C_arr[1:], columns=C_arr[0])
-    print("len df:", len(df))
+    #print("len df:", len(df))
     df.to_csv(path_csv)
 
-    print(("Tot APLS = np.mean(APLS_arr:", np.mean(df['APLS'].values)))
+    #print(("Tot APLS = np.mean(APLS_arr:", np.mean(df['APLS'].values)))
 
-    return
+    return apls_val, topo_val, sp_val
 
 
 ###############################################################################
