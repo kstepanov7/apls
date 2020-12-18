@@ -2700,7 +2700,7 @@ def gather_files(test_method, truth_dir, prop_dir,
             print(outroot)
 
             # gt file
-            df_wkt_gt = pd.read_csv(gt_wkt_file)
+            df_wkt_gt = gt_wkt_file
             image_id = outroot
 #            # SN5 version
 #            AOI_root = 'AOI' + f.split('AOI')[-1]
@@ -2777,7 +2777,7 @@ def gather_files(test_method, truth_dir, prop_dir,
             # proposal
             # adapted from wkt_to_G.main()
             # read in wkt list
-            df_wkt = pd.read_csv(prop_wkt_file)
+            df_wkt = prop_wkt_file
             # columns=['ImageId', 'WKT_Pix'])
 
             # original version
