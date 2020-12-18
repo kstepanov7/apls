@@ -26,11 +26,11 @@ from shapely.geometry import Point, LineString
 path_apls_src = os.path.dirname(os.path.realpath(__file__))
 path_apls = os.path.dirname(path_apls_src)
 sys.path.append(path_apls_src)
-import apls
-import apls_plots
-import apls_utils
-import osmnx_funcs
 
+from apls.apls import apls
+import apls.apls.apls_utils as apls_utils
+import apls.apls.apls_plots as apls_plots
+import apls.apls.osmnx_funcs as osmnx_funcs
 
 ###############################################################################
 def ensure_radial_linestrings(G_sub_, origin_node, x_coord='x', y_coord='y',
