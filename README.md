@@ -1,10 +1,3 @@
-<h1 align="center">APLS Metric</h1>
-<p align="center">
-<a href="http://www.cosmiqworks.org"><img src="https://www.cosmiqworks.org/wp-content/uploads/2019/10/cosmiqworks-logo-r@2x-1.png" width="350" alt="CosmiQ Works"></a>
-<br>
-<br>
-</p>
-
 ## Setup and Dependencies
 - GDAL
 - geopandas==0.6.3
@@ -16,6 +9,15 @@
 
 
 Example of usage provided in **calc_apls.ipynb**
+
+
+<h1 align="center">APLS Metric</h1>
+<p align="center">
+<a href="http://www.cosmiqworks.org"><img src="https://www.cosmiqworks.org/wp-content/uploads/2019/10/cosmiqworks-logo-r@2x-1.png" width="350" alt="CosmiQ Works"></a>
+<br>
+<br>
+</p>
+
 
 
 
