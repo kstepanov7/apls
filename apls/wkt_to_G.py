@@ -13,7 +13,7 @@ import os
 import sys
 path_apls_src = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(path_apls_src)
-from apls.apls.apls import _clean_sub_graphs
+import apls.apls.apls._clean_sub_graphs as  _clean_sub_graphs
 
 import apls.apls.apls_utils as apls_utils
 import apls.apls.osmnx_funcs as osmnx_funcs
