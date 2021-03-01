@@ -104,7 +104,7 @@ def cut(line, distance):
                 LineString([(cp.x, cp.y)] + coords[i:])]
 
 
-def to_line_strings(mask, sigma=2, threashold=0.51, small_obj_size=0, dilation=0):
+def to_line_strings(mask, sigma=2, threashold=0.51):
     mask = gaussian(mask, sigma=sigma)
     #mask = mask[..., 0]
     mask[mask < threashold] = 0
@@ -112,11 +112,6 @@ def to_line_strings(mask, sigma=2, threashold=0.51, small_obj_size=0, dilation=0
     mask = np.array(mask, dtype=np.uint8)
     #mask = mask[:1300, :1300]
     mask = cv2.copyMakeBorder(mask, 8, 8, 8, 8, cv2.BORDER_REPLICATE)
-    if dilation > 0:
-        mask = binary_dilation(mask, iterations=dilation)
-    #mask, _ = ndimage.label(mask)
-    if small_obj_size > 0:
-        mask = remove_small_objects(mask, small_obj_size)
     mask[mask > 0] = 1
 
     ske = skeletonize(mask).astype(np.uint16)
