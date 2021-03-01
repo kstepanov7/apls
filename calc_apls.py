@@ -9,6 +9,7 @@ Original file is located at
 
 import cv2
 import numpy as np
+import pandas as pd
 import sknw
 from sknw.sknw import build_sknw
 from scipy import ndimage
@@ -103,8 +104,8 @@ def cut(line, distance):
                 LineString([(cp.x, cp.y)] + coords[i:])]
 
 
-def to_line_strings(mask, sigma=0.5, threashold=0.3, small_obj_size=300, dilation=1):
-    #mask = gaussian(mask, sigma=sigma)
+def to_line_strings(mask, sigma=2, threashold=0.51, small_obj_size=0, dilation=0):
+    mask = gaussian(mask, sigma=sigma)
     #mask = mask[..., 0]
     mask[mask < threashold] = 0
     mask[mask >= threashold] = 1
@@ -113,8 +114,9 @@ def to_line_strings(mask, sigma=0.5, threashold=0.3, small_obj_size=300, dilatio
     mask = cv2.copyMakeBorder(mask, 8, 8, 8, 8, cv2.BORDER_REPLICATE)
     if dilation > 0:
         mask = binary_dilation(mask, iterations=dilation)
-    mask, _ = ndimage.label(mask)
-    mask = remove_small_objects(mask, small_obj_size)
+    #mask, _ = ndimage.label(mask)
+    if small_obj_size > 0:
+        mask = remove_small_objects(mask, small_obj_size)
     mask[mask > 0] = 1
 
     ske = skeletonize(mask).astype(np.uint16)
@@ -123,7 +125,6 @@ def to_line_strings(mask, sigma=0.5, threashold=0.3, small_obj_size=300, dilatio
     line_strings = []
     lines = []
     all_coords = []
-    #node, nodes = graph.node, graph.nodes()
     nodes = graph.nodes()
     # draw edges by pts
     for (s, e) in graph.edges():
@@ -166,9 +167,8 @@ def to_line_strings(mask, sigma=0.5, threashold=0.3, small_obj_size=300, dilatio
     line_strings = [ l.wkt for l in new_lines]
     return line_strings
 
-import pandas as pd
 
-def prepare_input(gt_mask, prop_mask, img_id='ID'):
+def prepare_input(gt_mask, prop_mask, img_id='ID', sigma=2):
     '''
     Converts to wkt format gt and proposal masks
     Input:
@@ -180,8 +180,8 @@ def prepare_input(gt_mask, prop_mask, img_id='ID'):
     '''
 
 
-    gt_ls = to_line_strings(gt_mask)
-    prop_ls = to_line_strings(prop_mask)
+    gt_ls = to_line_strings(gt_mask, sigma=sigma)
+    prop_ls = to_line_strings(prop_mask, sigma=sigma)
 
     data = []
     for i in range(len(gt_ls)):
@@ -195,7 +195,6 @@ def prepare_input(gt_mask, prop_mask, img_id='ID'):
 
     return df_gt, df_prop
 
-
 class HiddenPrints:
     def __enter__(self):
         self._original_stdout = sys.stdout
@@ -206,7 +205,8 @@ class HiddenPrints:
         sys.stdout = self._original_stdout
 
 
-def calc_apls(mask_gt, mask_p, img_dir, apls_only=True):
+def calc_apls(mask_gt, mask_p, img_dir, max_snap=4,
+              max_nodes=500, min_path_length=10, apls_only=True):
     '''
     Calculates apls and some other metrics
     Input:
@@ -230,5 +230,6 @@ def calc_apls(mask_gt, mask_p, img_dir, apls_only=True):
                                                   prop_wkt_file=df_prop,
                                                   max_files=1000)
         
-        score = execute(img_id, gt_list, gp_list, root_list, im_loc_list, test_method="gt_wkt_prop_wkt", verbose=False, apls_only=apls_only)
+        score = execute(img_id, gt_list, gp_list, root_list, im_loc_list, test_method="gt_wkt_prop_wkt", verbose=False, 
+                        max_snap_dist=max_snap, max_nodes=max_nodes, min_path_length=min_path_length, apls_only=apls_only)
         return score
